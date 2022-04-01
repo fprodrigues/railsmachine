@@ -1,9 +1,11 @@
 require 'smarter_csv'
 require 'classifier-reborn'
+require 'net/http'
 class HomeController < ApplicationController
   def index
     @errors = ""
     @categories = ""
+    @news = session[:news] || ""
     if session[:come_from_import] === 1
       @errors = session[:error]
       @categories = session[:categories]
@@ -15,6 +17,11 @@ class HomeController < ApplicationController
       session[:class_text] = ""
     end
     session[:come_from_import] = 0
+  end
+
+
+  def download
+    send_file 'app/assets/docs/arquivo.csv', type: 'text/csv', status: 202
   end
 
   def import
@@ -31,6 +38,7 @@ class HomeController < ApplicationController
         clear_msg
         training_model(file, arry_uniq)
         session[:categories] = arry_uniq
+        session[:news] = get_news
       end
       session[:come_from_import] = 1
       redirect_to root_path
@@ -61,6 +69,17 @@ class HomeController < ApplicationController
 
   def clear_msg
     session[:error]=""
+  end
+
+  def get_news
+    begin
+      uri = URI("https://inshortsapi.vercel.app/news?category=all")
+      response=Net::HTTP.get(uri)
+      data = JSON.parse response
+      return data['data'][5]["content"]
+    rescue
+      return "Infelizmente estamos sem noticias"
+    end
   end
 
   def training_model(file, categories)

@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   post "/home/import", to: "home#import"
   post "/home/classify", to: "home#classify"
 
+  match 'download', to: 'home#download', as: 'download', via: :get
 end

@@ -1,22 +1,63 @@
+<div class="container">
+  <br>
+  <h4 class="text-center">Rails Machine</h4>
+  <%= image_tag("logo.png", size: "300x150", class: "rounded mx-auto d-block") %>
 
-<h1>Teste2</h1>
+  <p>   Esse pequena aplicação feita com os conceitos de machine learning,
+  consegue classificar sozinha qual seria o tema de algum texto adicionado.
+  </p>
 
-<%= form_tag({:action => :import}, multipart: true) do %>
-  <%= file_field_tag :file, :accept => "text/csv" %>
-  <%= submit_tag( "Importar CSV" ) %>
-<% end %>
 
-<% if @categories.length >= 1 %>
-  <h4>Suas categorias são: </h4>
-  <% @categories.each do |category| %>
-    <p><%= category %></p>
+  <% if !@errors.nil? && @errors.length > 1 %>
+  <div class="alert alert-danger" role="alert">
+    <%= @errors %>
+  </div>
   <% end %>
 
-  <%= form_tag({:action => :classify}, multipart: true) do %>
-    <%= text_field_tag :text %>
-    <%= submit_tag( "Classificar" ) %>
+
+  <h6>Bem vamos a prática</h6>
+  <p>Para isso, a primeira coisa que ele precisa é ser treinado.</p>
+  <p>Ele precisa de um arquivo csv com duas colunas, uma com o nome "text" e a segunda com nome "category".</p>
+  <p>Caso não tenha um arquivo com essas especificações, pode usar .</p>
+
+  <div class="alert alert-warning" role="alert">
+    Caso não tenha um arquivo com essas especificações, pode baixar   <%= link_to 'nesse link', download_path , target: "_blank", class: "alert-link" %> que foi feito pela BBC.
+  </div>
+
+  <p>Agora é simples, só importar ele para fazer o treinamento.</p>
+  <%= form_tag({:action => :import}, multipart: true) do %>
+    <%= file_field_tag :file, :accept => "text/csv" %>
+    <%= submit_tag( "Importar CSV", class: "btn btn-dark") %>
   <% end %>
 
-<% end %>
-<%= @errors %>
-<%= @class_text %>
+  <% if @categories.length >= 1 %>
+  <div class="alert alert-success" role="alert">
+    O treinamento foi um sucesso.
+  </div>
+    <h4>Suas categorias são: </h4>
+    <% @categories.each do |category| %>
+      <p><%= category %></p>
+    <% end %>
+
+    Agora é só colocar um texto para ser classificada.
+    <div class="alert alert-dark" role="alert">
+      Caso precise de uma notícia para testar, temos essa (desculpe se demorar ou estiver indisponivel, estamos usando uma api publica):
+      <b><%= @news %></b>
+    </div>
+    <%= form_tag({:action => :classify}, multipart: true) do %>
+      <%= text_area_tag :text %>
+      <%= submit_tag( "Classificar", class: "btn btn-dark") %>
+    <% end %>
+  <% end %>
+
+
+  <% if !@class_text.nil? && @class_text.length > 1 %>
+    <div class="alert alert-success" role="alert">
+    <%= @class_text %>
+    </div>
+  <% end %>
+
+  <br>
+  <br>
+  <br>
+</di>
