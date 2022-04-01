@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root to: "home#index"
+  post "/home/import", to: "home#import"
+  post "/home/classify", to: "home#classify"
+
 end

@@ -1,1 +1,22 @@
-<h1>Teste</h1>
+
+<h1>Teste2</h1>
+
+<%= form_tag({:action => :import}, multipart: true) do %>
+  <%= file_field_tag :file, :accept => "text/csv" %>
+  <%= submit_tag( "Importar CSV" ) %>
+<% end %>
+
+<% if @categories.length >= 1 %>
+  <h4>Suas categorias são: </h4>
+  <% @categories.each do |category| %>
+    <p><%= category %></p>
+  <% end %>
+
+  <%= form_tag({:action => :classify}, multipart: true) do %>
+    <%= text_field_tag :text %>
+    <%= submit_tag( "Classificar" ) %>
+  <% end %>
+
+<% end %>
+<%= @errors %>
+<%= @class_text %>
